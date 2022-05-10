@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            figcaption {
+                font-size: 14pt;
+                font-weight: 700;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+            .inside {
+                position: absolute;
+                top: 400px;
+                left:700;
+                font-size: 18pt;
+                font-weight: 900;
+                
+            }
+            .insidePicts {
+                position: absolute;
+                top: 450px;
+            }
+            .standartTwo {
+                position: absolute;
+                top: 1100px;
+                left:700;
+                font-size: 18pt;
+                font-weight: 900;
+            }
+            .standartTwoPicts {
+                position: absolute;
+                top: 1130px;
+            }
+            .oneThird {
+                position: absolute;
+                top: 1780px;
+                left:620;
+                font-size: 18pt;
+                font-weight: 900;
+            }
+            .oneThirdPicts {
+                position: absolute;
+                top: 1810px;
+            }
+            .twoFamily {
+                position: absolute;
+                top: 2430px;
+                left:720;
+                font-size: 18pt;
+                font-weight: 900;
+                height: 700px;
+            }
+            .twoFamilyPicts {
+                position: absolute;
+                top: 2460px;
+            }
+            .firstRow {
+                position: absolute;
+                left: 5px;
+            }
+            .secondRow {
+                position: absolute;
+                left: 615px;
+            }
+            .thirdRow {
+                position: absolute;
+                left: 1226px;
+            }
+    </style>
+    <title>Галерея</title>
+</head>
+<body>
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" width=1900px, height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" width=364px, height=228px>
+</div>
+<div>
+    <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+    <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+    <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+    <a th:href="@{/contacts}" title="Как с нами связаться">Контакты</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/login}" title="Вход для администратора">Администратор</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация бронирований</a>
+</div>
+<div class=inside>
+    <p>Внешний вид отеля и окрестности</p>
+</div>
+<div class=insidePicts>
+    <figure class="firstRow">
+        <img src="gallery/hotel.JPG" width="603px" height="502px">
+        <figcaption>Гостевой дом "Дельфин"</figcaption>
+    </figure>
+    <figure class="secondRow">
+        <img src="gallery/foodCort.JPG" width="603px" height="502px">
+        <figcaption>Фудкорт</figcaption>
+    </figure>
+    <figure class="thirdRow">
+        <img src="gallery/terassaSecondFloor.jpg" width="603px" height="502px">
+        <figcaption>Терасса второго этажа</figcaption>
+    </figure>
+</div>
+<div class="standartTwo">Стандартный двухместный номер</div>
+<div class="standartTwoPicts">
+    <figure class="firstRow">
+        <img src="rooms/standartSecondPlace/a_twoBeds.JPG" width="603px" height="502px">
+        <figcaption>Спальные места</figcaption>
+    </figure>
+    <figure class="secondRow">
+        <img src="rooms/standartSecondPlace/b_balcony.jpg" width="603px" height="502px">
+        <figcaption>Место для отдыха на терассе</figcaption>
+    </figure>
+    <figure class="thirdRow">
+        <img src="rooms/standartSecondPlace/d_toilet.JPG" width="603px" height="502px">
+        <figcaption>Душ и туалет</figcaption>
+    </figure>
+</div>
+<div class="oneThird">Однокомнтаный трёхместный семейный номер</div>
+<div class="oneThirdPicts">
+    <figure class="firstRow">
+        <img src="rooms/familyThirdPlace/a_beds.JPG" width="603px" height="502px">
+        <figcaption>Спальные места</figcaption>
+    </figure>
+    <figure class="secondRow">
+        <img src="rooms/familyThirdPlace/b_balcony.JPG" width="603px" height="502px">
+        <figcaption>Отдельный балкон</figcaption>
+    </figure>
+    <figure class="thirdRow">
+        <img src="rooms/familyThirdPlace/c_table.JPG" width="603px" height="502px">
+        <figcaption>Рабочий стол</figcaption>
+    </figure>
+</div>
+<div class="twoFamily">Двухкомнатный семейный номер</div>
+<div class="twoFamilyPicts">
+    <figure class="firstRow">
+        <img src="rooms/secondRoomHighComfort/a_bigBed.JPG" width="603px" height="502px">
+        <figcaption>Комната №1</figcaption>
+    </figure>
+    <figure class="secondRow">
+        <img src="rooms/secondRoomHighComfort/b_bigBedAnother.JPG" width="603px" height="502px">
+        <figcaption>Комната №2</figcaption>
+    </figure>
+    <figure class="thirdRow">
+        <img src="rooms/secondRoomHighComfort/e_shower.JPG" width="603px" height="502px">
+        <figcaption>Душевая</figcaption>
+    </figure>
+</div>
+</body>
+</html>

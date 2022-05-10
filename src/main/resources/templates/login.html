@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+  </style>
+  <title>Вход для администратора</title>
+</head>
+<body>
+<header>
+  <h1>Гостевой дом Дельфин</h1>
+  <img src="topBackground.jpg" width=1900px, height=228px>
+</header>
+<div>
+  <img class=logo src="logo.jpg" width=364px, height=228px>
+</div>
+<div>
+  <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+  <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+  <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+</div>
+</div>
+<div th:if="${error}">
+  <p>Введен неверный логин и/или пароль. Повторите ввод</a>
+  </p>
+</div>
+<div>
+  <h3>Вход для администратора</h3>
+  <form th:action="@{/login}" method="post">
+    <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden">
+    <input type="text" name="username" placeholder="Введите логин"/>
+    <input type="password" name="password" placeholder="Введите пароль"/>
+    <input type="submit" value="Войти"/>
+  </form>
+  <a th:href="@{/mainPage}">На главную</a>
+</div>
+</body>
+</html>

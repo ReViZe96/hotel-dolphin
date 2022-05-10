@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+        <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            p>b {
+                color: red;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+        </style>
+        <title>Контакты</title>
+    </head>
+    <body>
+        <header>
+            <h1>Гостевой дом Дельфин</h1>
+            <img src="topBackground.jpg", width=1900px, height=228px>
+        </header>
+        <div>
+            <img class=logo src="logo.jpg", width=364px, height=228px>
+        </div>
+        <div>
+            <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+            <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+            <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+            <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+            <a sec:authorize="!hasRole('ADMIN')" th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+            <a sec:authorize="!hasRole('ADMIN')" th:href="@{/login}" title="Вход для администратора">Администратор</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация бронирований</a>
+        </div>
+        <div>
+            <p>Телефон/WhatApp:  <b>8-9XX-XXX-XX-XX</b></p>
+            <p>Электронная почта:  <b>delphinhotel@gmail.com</b></p>
+            <p>Instagram:  <b>@delphinhotel</b></p>
+            <p>Facebook:  <b>/delphinhotel</b></p>
+        </div>
+    </body>
+</html>

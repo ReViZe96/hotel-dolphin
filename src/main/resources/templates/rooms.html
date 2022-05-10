@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            div>h4 {
+                font-size: 16pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+            .standTwo {
+                position: absolute;
+                top: 450px;
+            }
+            .definition {
+                position: absolute;
+                left:470px;
+                top:60px;
+                width: 400px;
+            }
+            .oneThird {
+                position: absolute;
+                top: 450px;
+                left: 1000px;
+            }
+            .twoFamily {
+                position: absolute;
+                top: 850px;
+                left: 500px;
+                height: 450px;
+            }
+    </style>
+    <title>Номера</title>
+</head>
+<body>
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" width=1900px, height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" width=364px, height=228px>
+</div>
+<div>
+    <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+    <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+    <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+    <a th:href="@{/contacts}" title="Как с нами связаться">Контакты</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/login}" title="Вход для администратора">Администратор</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация бронирований</a>
+</div>
+<div>
+    <p>Мы рады предложить вам три разновидности номеров.</p>
+</div>
+<div class=standTwo>
+    <h4>Стандартный двухместный номер</h4>
+    <img src="rooms/standartSecondPlace/a_twoBeds.JPG" width=403px, height=302>
+    <p class="definition">Площадь - 20 кв. м.<br>
+        Вместимость - до 2-х человек<br>
+        Выход на терассу
+    </p>
+</div>
+<div class=oneThird>
+    <h4>Однокомнатный трёхместный семейный номер</h4>
+    <img src="rooms/familyThirdPlace/a_beds.JPG" width="403" height="302">
+    <p class="definition">Площадь - 20 кв. м.<br>
+        Вместимость - до 3-х человек<br>
+        Отдельный балкон
+    </p>
+</div>
+<div class=twoFamily>
+    <h4>Двухкомнатный семейный номер</h4>
+    <img src="rooms/secondRoomHighComfort/c_twoBeds.JPG" width="403" height="302">
+    <p class="definition">Площадь - 40 кв. м.<br>
+        Вместимость - до 6-ти человек<br>
+        Выход на терассу
+</div>
+</body>
+</html>

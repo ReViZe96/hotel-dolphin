@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+    </style>
+    <title>Забронировать</title>
+</head>
+<body>
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" , width=1900px, height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" , width=364px, height=228px>
+</div>
+<div>
+    <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+    <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+    <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+    <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+    <a th:href="@{/contacts}" title="Как с нами связаться">Контакты</a>
+</div>
+<h3>Бронирование места в отеле</h3>
+<form th:action="@{/makeBook}" method="post">
+    <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+    <input type="text" pattern=".{1,100}" name="name" placeholder="ФИО" required>
+    <input type="text" pattern="^[1-9]\d*$" name="amount" placeholder="Количество человек" required>
+    <input type="text" pattern="\d{1,25}" name="phone" placeholder="Номер телефона для обратной связи" required>
+    <p>Дата и время заселения:</p><input type="datetime-local" pattern=".{1.50}" name="checkIn" required>
+    <p>Дата и время выселения:</p><input type="datetime-local" pattern=".{1,50}" name="checkOut" required></br>
+    </br>
+    <button type="submit">Забронировать</button>
+</form>
+</body>
+</html>

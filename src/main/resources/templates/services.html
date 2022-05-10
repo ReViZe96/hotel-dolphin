@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+                body {
+            background-color:#ADD8E6;
+            }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            div>h4 {
+                font-size: 16pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+            .homeKitchen {
+                position: absolute;
+                top: 450px;
+            }
+            .definition {
+                position: absolute;
+                left:470px;
+                top:60px;
+                width: 400px;
+                font-weight: 200;
+            }
+            .mangalZone {
+                position: absolute;
+                top: 450px;
+                left: 1000px;
+            }
+            .sportGames {
+                position: absolute;
+                top: 850px;
+                height: 450px;
+            }
+            .childPlace {
+                position: absolute;
+                top: 850px;
+                left: 1000px;
+            }
+    </style>
+    <title>Услуги</title>
+</head>
+<body>
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" , width=1900px, height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" , width=364px, height=228px>
+</div>
+<div>
+    <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+    <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+    <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+    <a th:href="@{/contacts}" title="Как с нами связаться">Контакты</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+    <a sec:authorize="!hasRole('ADMIN')" th:href="@{/login}" title="Вход для администратора">Администратор</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация бронирований</a>
+</div>
+<div>
+    <p>Помимо комфортабельных номеров, на территории отеля имеются следующие услуги</p>
+</div>
+<div class="homeKitchen">
+    <h4>Домашняя кухня</h4>
+    <img src="services/homeKitchen.jpg" width="403px" height="302px">
+    <p class="definition"> Столовая работает...придумать текст</p>
+</div>
+<div class="mangalZone">
+    <h4>Мангальная зона</h4>
+    <img src="services/mangalZone.jpg" width="403px" height="302px">
+    <p class="definition">Мангал такой-то...придумать текст</p>
+</div>
+<div class="sportGames">
+    <h4>Спортивные игры</h4>
+    <img src="services/sportGames.jpg" width="403px" height="302px">
+    <p class="definition">Спортивная площадка...придумать текст</p>
+</div>
+<div class="childPlace">
+    <h4>Детская площадка</h4>
+    <img src="gallery/childPlace.JPG" width="403px" height="302px">
+    <p class="definition">Игровая зона для детей...придумать текст</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+  </style>
+    <title>Запрос на бронирование отправлен</title>
+</head>
+<body>
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" width=1900px, height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" width=364px, height=228px>
+</div>
+<div>
+    <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+    <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+    <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+    <a th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+</div>
+    <h3>Запрос на бронирование отправлен. В течение 24 часов мы свяжемся с вами, для уточнения деталей.
+        Для более быстрой обратной связи свяжитесь с нами по телефону 8(ХХХ)ХХХ-ХХ-ХХ.</h3>
+    <a th:href="@{/mainPage}">На главную</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+            body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            td>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            div>h3 {
+                font-size: xx-large;
+                color:#4B0082;
+            }
+            div>h4 {
+                font-size: 16pt;
+            }
+            div>h5 {
+                font-size: 14pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+            .main {
+                position: absolute;
+                top:500px;
+                left: 300px;
+            }
+            .mainWords {
+                width: 1870px;
+            }
+            .addres {
+                position: absolute;
+                top: 1350px;
+                height: 300px;
+            }
+
+            .commonInfo {
+                position: absolute;
+                height: 600px;
+                top: 1700px;
+            }
+            .common {
+                position: absolute;
+                left: 1200px;
+                top:130px;
+            }
+            .commonWords {
+                width:1200px;
+            }
+
+            .climatInfo {
+                position: absolute;
+                height: 250;
+                top: 2350px;
+            }
+            .climat {
+                position: absolute;
+                left:1000px;
+                top:50px;
+            }
+            .climatWords {
+                width: 1000px;
+            }
+
+            .secondRow {
+                position: absolute;
+                left: 585px;
+                top: 245px;
+            }
+            .thirdRow {
+                position: absolute;
+                left: 1170px;
+                top: 245px;
+            }
+            .kosaInfo {
+                position: absolute;
+                height: 500px;
+                top: 2650px;
+            }
+
+            .dirty {
+                position: absolute;
+                left: 1358px;
+                top: 50px;
+            }
+            .dirtyWords {
+                width: 1358px;
+            }
+            .dirtyInfo {
+                position: absolute;
+                height: 350px;
+                top: 3200px;
+            }
+
+            .kazak1 {
+                position: absolute;
+                left: 740px;
+                top: 50px;
+            }
+            .kazak2 {
+                position: absolute;
+                left:1545px;
+                top: 50px;
+            }
+            .kazakWords {
+                width: 740px;
+            }
+            .kazakInfo {
+                position: absolute;
+                height: 450px;
+                top: 3600px;
+            }
+            footer {
+                position: absolute;
+                height: 100px;
+                top: 4100px;
+            }
+            .exitButton {
+            width: 200px;
+            height: 40px;
+            }
+    </style>
+    <title>Гостевой дом Дельфин</title>
+</head>
+<body>
+<header>
+    <h1><a name="up"></a>Гостевой дом Дельфин</h1>
+    <img src="topBackground.jpg" width=1900px height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" width=364px height=228px>
+</div>
+<table>
+    <tr>
+        <td><a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a></td>
+        <td><a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a></td>
+        <td><a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a></td>
+        <td><a th:href="@{/contacts}" title="Как с нами связаться">Контакты</a></td>
+        <td><a sec:authorize="!hasRole('ADMIN')" th:href="@{/bookPage}" title="Забронировать места">Забронировать</a>
+        </td>
+        <td><a sec:authorize="!hasRole('ADMIN')" th:href="@{/login}" title="Вход для администратора">Администратор</a>
+        </td>
+        <td><a sec:authorize="hasRole('ADMIN')" th:href="@{/moderate}"
+               title="Обработка поступивших запросов на бронирование">Модерация бронирований</a></td>
+        <td>
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/logout}" method="post">
+                <button class="exitButton" type="submit" title="Обратно в пользовательский режим">Выйти</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<div>
+    <p class="mainWords"><a name="inform"></a>Гостевой дом Дельфин расположен в станице Должанской Краснодарского края
+        на берегу Азовского моря. Гостей ждут 22 комфортабельных номера со всеми условиями, вежливый персонал, домашняя
+        кухня и тёплая атмосфера.</p>
+    <img class=main src="gallery/hotel.JPG" width=1340px height=860px>
+</div>
+<div class="addres">
+    <h3>Адрес: Краснодарский край, станица Должанская, пер. Луговой, д. N</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5481.1845616858145!2d37.783999412065036!3d46.61505993168928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40e6798d9ec93ccf%3A0x90dffe4562c83d0b!2z0JTQtdC70YzRhNC40L0!5e0!3m2!1sru!2sru!4v1651923825291!5m2!1sru!2sru"
+            width="1880" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+<div class=commonInfo>
+    <h3><a name="Doljan">Станица Должанская</a></h3>
+    <h4>Общая информация</h4>
+    <p class=commonWords>Расположена в 40 км к западу от города Ейск, на северо-западном окончании Ейского полуострова,
+        у основания песчаной косы Долгой. Побережье станицы омывается с северо-востока водами Таганрогского залива, а с
+        юго-запада — открытого Азовского моря. В нескольких километрах от окончания Долгой косы расположена группа
+        островов. </p>
+    <figure class="common">
+        <p><img src="mainPage/CommonInformation.jpg" width=640px height=400px></p>
+        <figcaption>Должанская на карте</figcaption>
+    </figure>
+</div>
+<div class="climatInfo">
+    <h4>Климат</h4>
+    <p class=climatWords>Умеренно континентальный, с мягкой, малоснежной зимой и жарким летом.<br>
+        Средняя скорость ветра — 6,4 м/с.<br>
+        Средняя относительная влажность воздуха — 76 %.<br>
+        Cреднее число ясных дней в году — 79. </p>
+    <figure class=climat>
+        <p><img src="mainPage/Climat.png" width=836px height=155px></p>
+        <figcaption>Климат Должанской</figcaption>
+    </figure>
+</div>
+<div class="kosaInfo">
+    <h4>Достопримечательности и досуг</h4>
+    <h5>Коса долгая</h5>
+    <p class="mainWords">Ландшафтный памятник природы. Коса образована из ракушек и ракушечного боя. На самом конце
+        Долгой нанос на 80-100% состоит из створок морских моллюсков. Коса является границей Азовского моря и
+        Таганрогского залива. Здесь постоянно собираются любители виндсерфинга и кайтсерфинга. На косе созданы
+        специальные базы, на которых могут разместиться как опытные серферы, так и новички. Здесь работают опытные
+        инструктора, и можно взять в прокат снаряжение.</p>
+    <figure>
+        <p><img src="mainPage/Dolgaya.jpg" width=535px height=239px></p>
+    </figure>
+    <figure class="secondRow">
+        <p><img src="mainPage/Dolgaya2.jpg" width=535px height=239px></p>
+    </figure>
+    <figure class="thirdRow">
+        <p><img src="mainPage/Dolgaya3.jpg" width=535px height=239px></p>
+    </figure>
+</div>
+<div class="dirtyInfo">
+    <h5>Грязевое озеро Лебединое</h5>
+    <p class=dirtyWords>Удобный резервуар с целебными грязями, расположенный практически на пляже. на дне которого
+        находятся залежи сульфидно-иловой грязи. Грязь эта имеет уникальные свойства лечить некоторые заболевания.
+        Грязелечение рекомендуют если есть проблемы позвоночника и суставов, а также при нарушении обмена веществ, для
+        восстановления после травм, для лечения кожных болезней, для повышения иммунитета.</p>
+    <figure class="dirty">
+        <p><img src="mainPage/DirtyMan.jpg" width=440px height=274px></p>
+    </figure>
+</div>
+<div class="kazakInfo">
+    <h5>Музей быта казаков</h5>
+    <p class=kazakWords>Расположен по адресу: ул. Пролетарская, 35 и является отделом Ейского районного краеведческого
+        музея. В этом музее, созданном руками местных жителей, интересно познакомиться с традициями и бытом казачьих
+        поселений. Можно при желании сфотографироваться в национальном костюме.</p>
+    <figure class="kazak1">
+        <p><img src="mainPage/Byt1.jpeg" width=600px height=360px></p>
+    </figure>
+    <figure class="kazak2">
+        <p><img src="mainPage/byt2.jpeg" width=250px height=360px></p>
+    </figure>
+</div>
+</body>
+<footer>
+    <div>
+        <a href="#up">Наверх</a>
+    </div>
+    <p>Developed by RVZ</p>
+</footer>
+</html>

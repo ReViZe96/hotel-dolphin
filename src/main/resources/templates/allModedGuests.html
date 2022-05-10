@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+             body {
+            background-color:#ADD8E6;
+        }
+            h1 {
+                font-family:cursive;
+                font-size: 40pt;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>a {
+                font-size: xx-large;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: 900;
+                color:#4B0082;
+            }
+            div>p {
+                font-size: 18pt;
+            }
+            .logo {
+                position: absolute;
+                left: 768px;
+                top: 135px;
+            }
+            td {
+            width: 500px;
+            height: 50px;
+            }
+            .FIO {
+            width: 800px;
+            }
+    </style>
+    <title>История бронирований</title>
+</head>
+<!--Поскольку защита на уровне методов (@Secured) не работает с Thymeleaf, а защита на уровне запросов (/admin, etc.) не позволяет
+отобразить некоторые элементы статики в конкретном режиме (ADMIN, etc.) - пришлось выкручиваться так-->
+<body sec:authorize="hasRole('ADMIN')">
+<header>
+    <h1>Гостевой дом Дельфин</h1>
+    <img src=topBackground.jpg width=1900px height=228px>
+</header>
+<div>
+    <img class=logo src="logo.jpg" width=364px height=228px>
+</div>
+<div>
+    <a th:href="@{/mainPage}" title="Вернуться на главную страницу">Главная</a>
+    <a th:href="@{/rooms}" title="Посмотреть описания номеров">Номера</a>
+    <a th:href="@{/gallery}" title="Фото отеля и окрестностей">Галерея</a>
+    <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
+    <a th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация новых
+        бронирований</a>
+</div>
+<table>
+    <tr>
+        <td><h3>Оперативный поиск</h3></td>
+        <td>
+            <form th:action="@{/findByName}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <input type="text" pattern=".{1,100}" name="name" placeholder="Введите ФИО" required/>
+                <button type="submit">Найти бронь по ФИО</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/findByPhone}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <input type="text" pattern=".{1,100}" name="phone" placeholder="Введите номер телефона" required/>
+                <button type="submit">Найти бронь по контактному номеру</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/findByAmount}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <input type="text" pattern="\d+" name="amount" placeholder="Введите количество мест" required/>
+                <button type="submit">Найти по количеству запрашиваемых мест</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/findByCheckIn}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <input type="text" pattern=".{1,50}" name="checkIn" placeholder="Введите дату и время заселения"
+                       required/>
+                <button type="submit">Найти по дате заселения</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/findByCheckOut}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <input type="text" pattern=".{1,50}" name="checkOut" placeholder="Введите дату и время выселения"
+                       required/>
+                <button type="submit">Найти по дате выселения</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<div th:if="${allModedGuests!=null}">
+    <h3>История бронирований (Список обработанных заявок на бронирование)</h3>
+    <table>
+        <tr>
+            <td class="FIO"><h5>ФИО</h5></td>
+            <td><h5>Номер телефона</h5></td>
+            <td><h5>Количество человек</h5></td>
+            <td><h5>Дата и время заселения</h5></td>
+            <td><h5>Дата и время выселения</h5></td>
+        </tr>
+        <tr th:each="modedGuest : ${allModedGuests}">
+            <td class="FIO" th:text="${modedGuest.name}"></td>
+            <td th:text="${modedGuest.phone}"></td>
+            <td th:text="${modedGuest.amount}"></td>
+            <td th:text="${modedGuest.checkIn}"></td>
+            <td th:text="${modedGuest.checkOut}"></td>
+            <td>
+                <form th:action="'/deleteGuest/'+${modedGuest.id}" method="post">
+                    <button type="submit">Удалить бронирование</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="'/confirmGuest/'+${modedGuest.id}" method="post">
+                    <button type="submit" name="watched" value="N">Отменить бронирование</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<div th:if="${allModedGuests==null}">
+    <h3>История бронирований пуста. Ещё ни один пользователь не побывал в отеле.</h3>
+</div>
+</body>
+<body sec:authorize="!(hasRole('ADMIN'))">
+<h1>Не влезай - убъёт!!!</h1>
+</body>
+</html>
