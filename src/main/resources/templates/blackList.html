@@ -23,6 +23,9 @@
             div>p {
                 font-size: 18pt;
             }
+              form>p {
+                font-size: small;
+            }
             .logo {
                 position: absolute;
                 left: 768px;
@@ -32,21 +35,14 @@
             width: 500px;
             height: 50px;
             }
-            form>p {
-            font-size: small;
-            }
             .FIO {
             width: 800px;
-            }
-            .inf {
-            width: 200px;
-            font-size: small;
             }
             .sort {
             font-size: medium;
             }
     </style>
-    <title>История бронирований</title>
+    <title>Список заблокированных пользователей</title>
 </head>
 <!--Поскольку защита на уровне методов (@Secured) не работает с Thymeleaf, а защита на уровне запросов (/admin, etc.) не позволяет
 отобразить некоторые элементы статики в конкретном режиме (ADMIN, etc.) - пришлось выкручиваться так-->
@@ -65,7 +61,8 @@
     <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
     <a th:href="@{/moderate}" title="Обработка поступивших запросов на бронирование">Модерация новых
         бронирований</a>
-    <a th:href="@{/blackList}" title="Список заблокированных пользователей">Чёрный список</a>
+    <a th:href="@{/showModedGuests}" title="Показать историю обработанных бронирований">Глобальная история
+        бронирований</a>
 </div>
 <table>
     <tr>
@@ -108,78 +105,56 @@
         <td>
             <form th:action="@{/findAllInInterval}" method="post">
                 <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
-                <p>С:<input type="date" name="checkIn" placeholder="Введите дату заселения"
-                                          required/></p>
-                <p>По:<input type="date" name="checkOut" placeholder="Введите дату выселения"
-                                          required/></p>
-                <button type="submit">Найти всех в этот период времени</button>
+                <p>С: <input type="date" name="checkIn" placeholder="Введите дату заселения"
+                             required/></p>
+                <p>По: <input type="date" name="checkOut" placeholder="Введите дату выселения"
+                              required/></p>
+                <button type="submit">Найти всех за период времени</button>
             </form>
         </td>
     </tr>
 </table>
-<div th:if="${allModedGuests!=null}">
-    <h3>История бронирований (Список обработанных заявок на бронирование)</h3>
+<div th:if="${blockedGuests!=null}">
+    <h3>Черный список пользователей</h3>
     <form th:action="@{/sortGuests}" method="post">
         <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
         <p class="sort">Сортировать по: <select name="sortingType" type="hidden">
-        <option value="ascIn">Возрастанию даты заселения (Чем позже - тем выше)</option>
-        <option value="descIn">Убыванию даты заселения (Чем раньше - тем выше)</option>
-        <option value="ascOut">Возрастанию даты выселения (Чем позже - тем выше)</option>
-        <option value="descOut">Убыванию даты выселения (Чем раньше - тем выше)</option>
-        <option value="ascName">ФИО (А-Я)</option>
-        <option value="descName">ФИО (Я-А)</option>
-        <option value="ascPeoples">Возрастанию количества гостей (Чем больше - тем выше)</option>
-        <option value="descPeoples">Убыванию количества гостей (Чем меньше - тем выше)</option>
-        <option value="ascRooms">Возрастанию количества комнат (Чем больше - тем выше)</option>
-        <option value="descRooms">Убыванию количества комнат (Чем меньше - тем выше)</option>
-        <option value="ascNights">Возрастанию количества ночей (Чем больше - тем выше)</option>
-        <option value="descNights">Убыванию количества ночей (Чем меньше - тем выше)</option>
-    </select></p>
+            <option value="ascIn">Возрастанию даты заселения (Чем позже - тем выше)</option>
+            <option value="descIn">Убыванию даты заселения (Чем раньше - тем выше)</option>
+            <option value="ascOut">Возрастанию даты выселения (Чем позже - тем выше)</option>
+            <option value="descOut">Убыванию даты выселения (Чем раньше - тем выше)</option>
+            <option value="ascName">ФИО (А-Я)</option>
+            <option value="descName">ФИО (Я-А)</option>
+            <option value="ascPeoples">Возрастанию количества гостей (Чем больше - тем выше)</option>
+            <option value="descPeoples">Убыванию количества гостей (Чем меньше - тем выше)</option>
+            <option value="ascRooms">Возрастанию количества комнат (Чем больше - тем выше)</option>
+            <option value="descRooms">Убыванию количества комнат (Чем меньше - тем выше)</option>
+            <option value="ascNights">Возрастанию количества ночей (Чем больше - тем выше)</option>
+            <option value="descNights">Убыванию количества ночей (Чем меньше - тем выше)</option>
+        </select></p>
         <button type="submit">Сортировать</button>
     </form>
     <table>
         <tr>
             <td class="FIO"><h5>ФИО</h5></td>
             <td><h5>Номер телефона</h5></td>
-            <td><h5>Количество человек</h5></td>
-            <td><h5>Количество комнат</h5></td>
-            <td><h5>Дата и время заселения</h5></td>
-            <td><h5>Дата и время выселения</h5></td>
-            <td><h5>Количество ночей</h5></td>
-            <td><h5>Дополнительная информация</h5></td>
         </tr>
-        <tr th:each="modedGuest : ${allModedGuests}">
-            <td class="FIO" th:text="${modedGuest.name}"></td>
-            <td th:text="${modedGuest.phone}"></td>
-            <td th:text="${modedGuest.amountOfPeoples}"></td>
-            <td th:text="${modedGuest.amountOfRooms}"></td>
-            <td th:text="${modedGuest.checkIn}"></td>
-            <td th:text="${modedGuest.checkOut}"></td>
-            <td th:text="${modedGuest.amountOfNights}"></td>
-            <td class="inf" th:text="${modedGuest.info}"></td>
+        <tr th:each="blockedGuest : ${blockedGuests}">
+            <td class="FIO" th:text="${blockedGuest.name}"></td>
+            <td th:text="${blockedGuest.phone}"></td>
             <td>
-                <form th:action="'/confirmGuest/'+${modedGuest.id}" method="post">
-                    <button type="submit" name="booked" value="N">Отменить бронирование</button>
-                </form>
-            </td>
-            <td th:if="${modedGuest.blackList}!='Y'">
-                <form th:action="'/blockGuest/'+${modedGuest.id}" method="post">
-                    <button type="submit" name="blocked" value="Y">Добавить в чёрный список</button>
-                </form>
-            </td>
-            <td th:if="${modedGuest.blackList}!='N'">
-                <form th:action="'/blockGuest/'+${modedGuest.id}" method="post">
+                <form th:action="'/blockGuest/'+${blockedGuest.id}" method="post">
                     <button type="submit" name="blocked" value="N">Убрать из чёрного списка</button>
                 </form>
             </td>
         </tr>
     </table>
     <form th:action="@{/saveHistoryInDoc}" method="post">
-        <button type="submit" name="type" value="history" title="Сохранить историю бронирований на устройстве">Скачать историю бронирований</button>
+        <button type="submit" name="type" value="blackList" title="Сохранить чёрный список пользователей на устройстве">Скачать чёрный список</button>
     </form>
 </div>
-<div th:if="${allModedGuests==null}">
-    <h3>История бронирований пуста. Ещё ни один пользователь не побывал в отеле.</h3>
+<div th:if="${blockedGuests==null}">
+    <h3>Список заблокированных пользователей пуст.</h3>
 </div>
 </body>
 <body sec:authorize="!(hasRole('ADMIN'))">

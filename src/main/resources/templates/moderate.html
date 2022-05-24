@@ -23,20 +23,13 @@
             div>p {
                 font-size: 18pt;
             }
+            form>p {
+                font-size: small;
+            }
             .logo {
                 position: absolute;
                 left: 768px;
                 top: 135px;
-            }
-            <!--Далее - фронт, который надо переделать (Работает нормально только под 15-ю диагональ экрана)-->
-            #name {
-            width: 100px;
-            }
-            #telephone {
-            width: 100px;
-            }
-            #peoples {
-            width: 100px;
             }
             #in {
             width: 100px;
@@ -47,20 +40,40 @@
             .editButton {
             width: 100px;
             }
+            .moderateButton {
+            height: 67px;
+            width: 70px;
+            }
             .name {
-            width: 460px;
+            width: 320px;
             }
             .phone {
-            width: 270px;
+            width: 235px;
             }
-            .amount {
-            width: 220px;
+            .peoples {
+            width: 145px;
+            }
+            .rooms {
+            width: 130px;
             }
             .checkIn {
-            width: 330px;
+            width: 240px;
             }
             .checkOut {
-            width: 330px;
+            width: 240px;
+            }
+            .nights {
+            width: 140px;
+            }
+            .info {
+            width: 140px;
+            }
+            .inf {
+            width: 200px;
+            font-size: small;
+            }
+            .sort {
+            font-size: medium;
             }
     </style>
     <title>Модерация бронирования</title>
@@ -82,6 +95,7 @@
     <a th:href="@{/services}" title="Информация о дополнительных услугах">Услуги</a>
     <a th:href="@{/showModedGuests}" title="Показать историю обработанных бронирований">Глобальная история
         бронирований</a>
+    <a th:href="@{/blackList}" title="Список заблокированных пользователей">Чёрный список</a>
 </div>
 <table>
     <tr>
@@ -101,39 +115,68 @@
             </form>
         </td>
         <td>
-            <form th:action="@{/findByAmount}" method="post">
+            <form th:action="@{/findByAmountOfPeoples}" method="post">
                 <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
-                <input type="text" pattern="\d+" name="amount" placeholder="Введите количество мест" required/>
-                <button type="submit">Найти по количеству запрашиваемых мест</button>
+                <input type="text" pattern="\d+" name="amount" placeholder="Введите количество гостей" required/>
+                <button type="submit">Найти по количеству запрашиваемых гостей</button>
             </form>
         </td>
         <td>
-            <form th:action="@{/findByCheckIn}" method="post">
+            <form th:action="@{/findByAmountOfRooms}" method="post">
                 <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
-                <input type="text" pattern=".{1,50}" name="checkIn" placeholder="Введите дату и время заселения"
-                       required/>
-                <button type="submit">Найти по дате заселения</button>
+                <input type="text" pattern="\d+" name="amount" placeholder="Введите количество комнат" required/>
+                <button type="submit">Найти по количеству запрашиваемых комнат</button>
             </form>
         </td>
         <td>
-            <form th:action="@{/findByCheckOut}" method="post">
+            <form th:action="@{/findByAmountOfNights}" method="post">
                 <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
-                <input type="text" pattern=".{1,50}" name="checkOut" placeholder="Введите дату и время выселения"
-                       required/>
-                <button type="submit">Найти по дате выселения</button>
+                <input type="text" pattern="\d+" name="amount" placeholder="Введите количество ночей" required/>
+                <button type="submit">Найти по количеству запрашиваемых ночей</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/findAllInInterval}" method="post">
+                <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+                <p>С:<input type="date" name="checkIn" placeholder="Введите дату заселения"
+                            required/></p>
+                <p>По:<input type="date" name="checkOut" placeholder="Введите дату выселения"
+                             required/></p>
+                <button type="submit">Найти всех в этот период времени</button>
             </form>
         </td>
     </tr>
 </table>
 <div th:if="${!(notModedGuests==null)}">
     <h3>Список необработанных заявок на бронирование</h3>
+    <form th:action="@{/sortGuests}" method="post">
+        <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+        <p class="sort">Сортировать по: <select name="sortingType" type="hidden">
+        <option value="ascIn">Возрастанию даты заселения (Чем позже - тем выше)</option>
+        <option value="descIn">Убыванию даты заселения (Чем раньше - тем выше)</option>
+        <option value="ascOut">Возрастанию даты выселения (Чем позже - тем выше)</option>
+        <option value="descOut">Убыванию даты выселения (Чем раньше - тем выше)</option>
+        <option value="ascName">ФИО (А-Я)</option>
+        <option value="descName">ФИО (Я-А)</option>
+        <option value="ascPeoples">Возрастанию количества гостей (Чем больше - тем выше)</option>
+        <option value="descPeoples">Убыванию количества гостей (Чем меньше - тем выше)</option>
+        <option value="ascRooms">Возрастанию количества комнат (Чем больше - тем выше)</option>
+        <option value="descRooms">Убыванию количества комнат (Чем меньше - тем выше)</option>
+        <option value="ascNights">Возрастанию количества ночей (Чем больше - тем выше)</option>
+        <option value="descNights">Убыванию количества ночей (Чем меньше - тем выше)</option>
+    </select></p>
+        <button type="submit">Сортировать</button>
+    </form>
     <table>
         <tr>
             <td class="name"><h5>ФИО</h5></td>
             <td class="phone"><h5>Номер телефона</h5></td>
-            <td class="amount"><h5>Количество человек</h5></td>
+            <td class="peoples"><h5>Количество человек</h5></td>
+            <td class="rooms"><h5>Количество комнат</h5></td>
             <td class="checkIn"><h5>Дата и время заселения</h5></td>
             <td class="checkOut"><h5>Дата и время выселения</h5></td>
+            <td class="nights"><h5>Количество ночей</h5></td>
+            <td class="info"><h5>Дополнительная информация</h5></td>
         </tr>
     </table>
     <table>
@@ -141,30 +184,39 @@
             <td th:text="${notModedGuest.name}"></td>
             <td>
                 <form th:action="'/editGuestsName/'+${notModedGuest.id}" method="post">
-                    <input type="text" id="name" pattern=".{1,100}" name="name" placeholder="Новые ФИО" required>
+                    <input type="text" size="10" pattern=".{1,100}" name="name" placeholder="Новые ФИО" required>
                     <button class="editButton" type="submit">Изменить ФИО</button>
                 </form>
             </td>
             <td th:text="${notModedGuest.phone}"></td>
             <td>
                 <form th:action="'/editGuestsPhone/'+${notModedGuest.id}" method="post">
-                    <input type="text" id="telephone" pattern="\d{1,25}" name="phone" placeholder="Новый номер телефона"
+                    <input type="text" size="5" pattern="\d{1,25}" name="phone" placeholder="Новый номер телефона"
                            required>
                     <button class="editButton" type="submit">Изменить контактный номер</button>
                 </form>
             </td>
-            <td th:text="${notModedGuest.amount}"></td>
+            <td th:text="${notModedGuest.amountOfPeoples}"></td>
             <td>
-                <form th:action="'/editGuestsAmount/'+${notModedGuest.id}" method="post">
-                    <input type="text" id="peoples" pattern="^[1-9]\d*$" name="amount" placeholder="Новое количество человек"
+                <form th:action="'/editGuestsAmountOfPeoples/'+${notModedGuest.id}" method="post">
+                    <input type="text" size="5" pattern="^[1-9]\d*$" name="amount"
+                           placeholder="Новое количество человек"
                            required>
                     <button class="editButton" type="submit">Изменить количество гостей</button>
+                </form>
+            </td>
+            <td th:text="${notModedGuest.amountOfRooms}"></td>
+            <td>
+                <form th:action="'/editGuestsAmountOfRooms/'+${notModedGuest.id}" method="post">
+                    <input type="text" size="5" pattern="^[1-9]\d*$" name="amount" placeholder="Новое количество комнат"
+                           required>
+                    <button class="editButton" type="submit">Изменить количество комнат</button>
                 </form>
             </td>
             <td th:text="${notModedGuest.checkIn}"></td>
             <td>
                 <form th:action="'/editGuestsCheckIn/'+${notModedGuest.id}" method="post">
-                    <input type="text" id="in" pattern=".{1,50}" name="checkIn"
+                    <input type="datetime-local" id="in" name="checkIn"
                            placeholder="Новые дата и время заселения" required>
                     <button class="editButton" type="submit">Изменить дату и время заселения</button>
                 </form>
@@ -172,19 +224,34 @@
             <td th:text="${notModedGuest.checkOut}"></td>
             <td>
                 <form th:action="'/editGuestsCheckOut/'+${notModedGuest.id}" method="post">
-                    <input type="text" id="out" pattern=".{1,50}" name="checkOut"
+                    <input type="datetime-local" id="out" name="checkOut"
                            placeholder="Новые дата и время выселения" required>
                     <button class="editButton" type="submit">Изменить дату и время выселения</button>
                 </form>
             </td>
+            <td th:text="${notModedGuest.amountOfNights}"></td>
+            <td>
+                <form th:action="'/editGuestsAmountOfNights/'+${notModedGuest.id}" method="post">
+                    <input type="text" pattern="^[1-9]\d*$" size="5" name="amount"
+                           placeholder="Новое количество ночей" required>
+                    <button class="editButton" type="submit">Изменить количество ночей</button>
+                </form>
+            </td>
+            <td class="inf" th:text="${notModedGuest.info}"></td>
             <td>
                 <form th:action="'/deleteGuest/'+${notModedGuest.id}" method="post">
-                    <button type="submit">Удалить бронирование</button>
+                    <button class="moderateButton" type="submit">Удалить бронь</button>
                 </form>
             </td>
             <td>
                 <form th:action="'/confirmGuest/'+${notModedGuest.id}" method="post">
-                    <button type="submit" name="watched" value="Y">Подтвердить бронирование</button>
+                    <button class="moderateButton" type="submit" name=booked value="Y">Подтвер- дить бронь</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="'/blockGuest/'+${notModedGuest.id}" method="post">
+                    <button class="moderateButton" type="submit" name="blocked" value="Y">Добавить в чёрный список
+                    </button>
                 </form>
             </td>
         </tr>

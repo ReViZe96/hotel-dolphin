@@ -49,8 +49,10 @@
 <form th:action="@{/makeBook}" method="post">
     <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
     <input type="text" pattern=".{1,100}" name="name" placeholder="ФИО" required>
-    <input type="text" pattern="^[1-9]\d*$" name="amount" placeholder="Количество человек" required>
     <input type="text" pattern="\d{1,25}" name="phone" placeholder="Номер телефона для обратной связи" required>
+    <input type="text" pattern="^[1-9]\d*$" name="amountOfPeoples" placeholder="Количество человек" required>
+    <input type="text" pattern="^[1-9]\d*$" name="amountOfRooms" placeholder="Количество комнат" required>
+    <input type="text" pattern=".{1,500}" name="info" placeholder="Прочие пожелания">
     <p>Дата и время заселения:</p><input type="datetime-local" pattern=".{1.50}" name="checkIn" required>
     <p>Дата и время выселения:</p><input type="datetime-local" pattern=".{1,50}" name="checkOut" required></br>
     </br>

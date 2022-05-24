@@ -13,6 +13,7 @@ import ru.hoteldolphin.dolphin.controllers.AdminControllers;
 import ru.hoteldolphin.dolphin.entities.Guests;
 import ru.hoteldolphin.dolphin.services.GuestsService;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +39,36 @@ public class AdminControllersTest {
     private Guests fourthGuest;
     private List<Guests> notModedList;
     private List<Guests> modedList;
+    private List<Guests> blackList;
+    private List<String> guestsStrings;
+    private Integer amountOfModed;
+    private Integer amountOfNotModed;
 
     @BeforeEach
     public void createTestDatas() {
         notModedList = new ArrayList<>();
         modedList = new ArrayList<>();
-        firstGuest = (new Guests("First", 2, "88888888888", "01.01.01", "02.02.02", "N"));
+        blackList = new ArrayList<>();
+        guestsStrings = new ArrayList<>();
+        firstGuest = new Guests("First", "88888888888", 2, 1, Timestamp.valueOf("2001-01-01 12:00:00"),
+                Timestamp.valueOf("2002-02-02 12:00:00"), 4, "Some information", 'N', 'N');
         notModedList.add(firstGuest);
-        secondGuest = (new Guests("First", 2, "88888888888", "01.01.01", "02.02.02", "N"));
+        secondGuest = new Guests("First", "88888888888", 2, 1, Timestamp.valueOf("2001-01-01 12:00:00"),
+                Timestamp.valueOf("2002-02-02 12:00:00"), 4, "Some information", 'N', 'N');
         notModedList.add(secondGuest);
-        thirdGuest = (new Guests("Second", 6, "89999999999", "11.11.2022", "12.12.2022", "Y"));
+        thirdGuest = new Guests("Second", "89999999999", 6, 2, Timestamp.valueOf("2022-11-11 12:00:00"),
+                Timestamp.valueOf("2022-12-12 12:00:00"), 8, "Some information", 'Y', 'Y');
         modedList.add(thirdGuest);
-        fourthGuest = (new Guests("Second", 6, "89999999999", "11.11.2022", "12.12.2022", "Y"));
+        blackList.add(thirdGuest);
+        fourthGuest = new Guests("Second", "89999999999", 6, 2, Timestamp.valueOf("2022-11-11 12:00:00"),
+                Timestamp.valueOf("2022-12-12 12:00:00"), 8, "Some information", 'Y', 'Y');
         modedList.add(fourthGuest);
+        blackList.add(fourthGuest);
+        amountOfModed = modedList.size();
+        amountOfNotModed = notModedList.size();
+        for (int i = 0; i < 2; i++) {
+            guestsStrings.add("Second,89999999999,6,2,2022-11-11 12:00:00,2022-12-12 12:00:00,8,SomeInformation,Y");
+        }
     }
 
     @Test
@@ -69,74 +87,91 @@ public class AdminControllersTest {
                 .andExpect(model().attribute("allModedGuests", modedList));
     }
 
-    /* Не подходит, т.к. БД изначально пустая --> ни один Guest не будет найден по id.
-    Придумать другой тест
     @Test
-    public void editNameTest() throws Exception {
-        this.guestsService.setGuestsName(1L, "Fifth");
-        this.mockMvc.perform(post("/editGuestsName/{id}", "1")
-                        .with(csrf())
-                        .param("name", "Fifth"))
-                .andExpect(status().isOk());
-    }  */
+    public void getBlackListTest() throws Exception {
+        given(this.guestsService.findBlockedGuests()).willReturn(blackList);
+        this.mockMvc.perform(get("/blackList"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("blockedGuests", blackList));
+    }
 
     @Test
     public void findGuestsByNameTest() throws Exception {
         given(this.guestsService.findGuestsByName("Second")).willReturn(modedList);
-        Integer amount = modedList.size();
         this.mockMvc.perform(post("/findByName")
                         .with(csrf())
                         .param("name", "Second"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("searchedGuests", modedList))
-                .andExpect(model().attribute("amountG", amount));
+                .andExpect(model().attribute("amountG", amountOfModed));
     }
 
     @Test
     public void findGuestsByPhoneTest() throws Exception {
         given(this.guestsService.findGuestsByPhone("89999999999")).willReturn(modedList);
-        Integer amount = modedList.size();
         this.mockMvc.perform(post("/findByPhone")
                         .with(csrf())
                         .param("phone", "89999999999"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("searchedGuests", modedList))
-                .andExpect(model().attribute("amountG", amount));
+                .andExpect(model().attribute("amountG", amountOfModed));
     }
 
     @Test
-    public void findGuestsByAmountTest() throws Exception {
-        given(this.guestsService.findGuestsByAmount(6)).willReturn(modedList);
-        Integer amount = modedList.size();
-        this.mockMvc.perform(post("/findByAmount")
+    public void findGuestsByAmountOfPeoplesTest() throws Exception {
+        given(this.guestsService.findGuestsByPeoplesAmount(6)).willReturn(modedList);
+        this.mockMvc.perform(post("/findByAmountOfPeoples")
                         .with(csrf())
                         .param("amount", "6"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("searchedGuests", modedList))
-                .andExpect(model().attribute("amountG", amount));
+                .andExpect(model().attribute("amountG", amountOfModed));
     }
 
     @Test
-    public void findGuestsByCheckInTest() throws Exception {
-        given(this.guestsService.findGuestsByCheckIn("11.11.2022")).willReturn(modedList);
-        Integer amount = modedList.size();
-        this.mockMvc.perform(post("/findByCheckIn")
+    public void findByAmountOfRoomsTest() throws Exception {
+        given(this.guestsService.findGuestsByRoomsAmount(1)).willReturn(notModedList);
+        this.mockMvc.perform(post("/findByAmountOfRooms")
                         .with(csrf())
-                        .param("checkIn", "11.11.2022"))
+                        .param("amount", "1"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("searchedGuests", modedList))
-                .andExpect(model().attribute("amountG", amount));
+                .andExpect(model().attribute("searchedGuests", notModedList))
+                .andExpect(model().attribute("amountG", amountOfNotModed));
     }
 
     @Test
-    public void findGuestsByCheckOutTest() throws Exception {
-        given(this.guestsService.findGuestsByCheckOut("12.12.2022")).willReturn(modedList);
-        Integer amount = modedList.size();
-        this.mockMvc.perform(post("/findByCheckOut")
+    public void findGuestsByAmountOfNightsTest() throws Exception {
+        given(guestsService.findGuestsByNightsAmount(4)).willReturn(notModedList);
+        this.mockMvc.perform(post("/findByAmountOfNights")
                         .with(csrf())
-                        .param("checkOut", "12.12.2022"))
+                        .param("amount", "4"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("searchedGuests", modedList))
-                .andExpect(model().attribute("amountG", amount));
+                .andExpect(model().attribute("searchedGuests", notModedList))
+                .andExpect(model().attribute("amountG", amountOfNotModed));
+    }
+
+    @Test
+    public void findAllGuestsInIntervalTest() throws Exception {
+        given(guestsService.findAllInTimeInterval("2001-01-01T12:00", "2002-02-02T12:00"))
+                .willReturn(notModedList);
+        this.mockMvc.perform(post("/findAllInInterval")
+                        .with(csrf())
+                        .param("checkIn", "2001-01-01T12:00")
+                        .param("checkOut", "2002-02-02T12:00"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("searchedGuests", notModedList))
+                .andExpect(model().attribute("amountG", amountOfNotModed));
+    }
+
+    @Test
+    public void saveHistoryTest() throws Exception {
+        given(guestsService.findModedGuests()).willReturn(modedList);
+        given(guestsService.convertEntitiesToStrings(modedList)).willReturn(guestsStrings);
+        given(guestsService.writeToFile(guestsStrings)).willReturn("Успех");
+        this.mockMvc.perform(post("/saveHistoryInDoc")
+                        .with(csrf())
+                        .param("type", "history"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("status", "Успех"));
     }
 }
